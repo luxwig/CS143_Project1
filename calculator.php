@@ -30,6 +30,8 @@ Here are some(but not limit to) reasonable test cases:
     // Remove whitespaces
     $equation = preg_replace('/\s+/', '', $input);
     // echo "$equation\n";
+    $equation = preg_replace('/--/', '+', $input);
+    // bug fixed : 1--2
     $output = "";
     $num = '((?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?|pi|π)';  
     $operators = '[\/*\^\+-,]';
@@ -46,7 +48,8 @@ Here are some(but not limit to) reasonable test cases:
             echo "$output\n";
         }
         else {
-            $output = "$equation = $result";
+            $output = "$input = $result";
+            // bug fixed : output original expression
             echo "$output\n";
         }
 
