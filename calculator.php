@@ -1,4 +1,4 @@
-<hitml>
+<html>
 <head><title>Calculator</title></head>
 <body>
 
