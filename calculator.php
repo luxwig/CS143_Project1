@@ -41,11 +41,11 @@ function e($errno, $errstr, $errfile, $errline) {
     $num = '((?:0|([1-9]\d*))(?:\.\d+)?(?:[eE][+\-]?\d+)?|pi|π)';  
     $operators = '[\/*\^\+-]';
     $regexp = '/^([-]?('.$num.'|\s*\((?1)+\)|\((?1)+\))(?:'.$operators.'(?1))?)+$/'; 
-
+    $regexp2 = '/(^0\d+)|'.$operators.'0\d+/';
     if ($equation <> "")
     {
         echo "<h1>Result</h1>";
-	if (preg_match($regexp, $equation) &&  !(preg_match('/\d\s+\d/', $input)))
+	if (preg_match($regexp, $equation) &&  !(preg_match('/\d\s+\d/', $input)) && ! preg_match($regexp2, $equation))
         {  
             set_error_handler('e');
             eval('$result = '.$equation.';');
