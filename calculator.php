@@ -26,40 +26,45 @@ Here are some(but not limit to) reasonable test cases:
 </ol>
 
 <?php
+
+$output = "";
+
+function e($errno, $errstr, $errfile, $errline) {
+	$GLOBALS['output'] = "Division by zero error!";
+}
     $input = $_GET["expr"];
     // Remove whitespaces
     $equation = preg_replace('/\s+/', '', $input);
+    $equation = preg_replace('/--/', '+', $equation);   
     // echo "$equation\n";
-    $equation = preg_replace('/--/', '+', $input);
     // bug fixed : 1--2
-    $output = "";
-    $num = '((?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?|pi|π)';  
-    $operators = '[\/*\^\+-,]';
-    $regexp = '/^([+-]?('.$num.'|\s*\((?1)+\)|\((?1)+\))(?:'.$operators.'(?1))?)+$/'; 
+    $num = '((?:0|([1-9]\d*))(?:\.\d+)?(?:[eE][+\-]?\d+)?|pi|π)';  
+    $operators = '[\/*\^\+-]';
+    $regexp = '/^([-]?('.$num.'|\s*\((?1)+\)|\((?1)+\))(?:'.$operators.'(?1))?)+$/'; 
 
     if ($equation <> "")
     {
         echo "<h1>Result</h1>";
-        if (preg_match($regexp, $equation))
-        {   
+	if (preg_match($regexp, $equation) &&  !(preg_match('/\d\s+\d/', $input)))
+        {  
+            set_error_handler('e');
             eval('$result = '.$equation.';');
-            if($result == ""){
-            $output = "Division by zero error!";
-            echo "$output\n";
-        }
-        else {
-            $output = "$input = $result";
-            // bug fixed : output original expression
-            echo "$output\n";
-        }
+	    if($output != ""){
+              echo "$output\n";
+            }
+	    else {  
+      	    	$output = "$input = $result";
+            	// bug fixed : output original expression
+            	echo "$output\n";
+            }
 
+        }
+    	else
+    	{
+        	$output = "Invalid Expression!";
+        	echo "$output\n";
+	}
     }
-    else
-    {
-        $output = "Invalid Expression!";
-        echo "$output\n";
-    }
-}
 ?>
 
 </body>
